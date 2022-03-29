@@ -13,6 +13,7 @@ include './functions/app.php';
 include_once  './config/settings.php';
 include  './functions/auth.php';
 include './functions/dbconnections.php';
+include './functions/crud.php';
 
 
 if(isset($_GET['page'])){

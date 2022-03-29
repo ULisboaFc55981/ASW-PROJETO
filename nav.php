@@ -122,7 +122,7 @@
       </div>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#">Missão</a>
+      <a class="nav-link" href="<?php echo 'index.php' . '?page=' . "changeSettings" ?>">Alterar Dados</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="#">Contacto</a>

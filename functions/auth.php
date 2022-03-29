@@ -54,30 +54,18 @@ function isLoggedInInstitute(){
     
     function RegisterVoluntario($dados)
     { 
-      $conn = getConnection();
+      
       $queryUser = "INSERT INTO Utilizador (email, tipo, telefone, pass, nome, codigo_distrito, codigo_concelho, codigo_freguesia) ";
       $queryUser .= " VALUES ( \"{$dados['email']}\" , \"Voluntario\" , {$dados['tel']} , '{$dados['password']}' , \"{$dados['nome']}\" , {$dados['cod_distrito']} , {$dados['cod_concelho']}, {$dados['cod_freguesia']}); ";
       
      $queryVoluntario ="INSERT INTO Voluntario (id_U ,cc, carta_conducao, genero, dob)";
      $queryVoluntario .=  "VALUES (LAST_INSERT_ID(), \"{$dados['cc']}\" ,  \"{$dados['Cconducao']}\" ,   \"{$dados['genero']}\" ,   \"{$dados['dob']}\"  );";
    
-      $result = mysqli_query($conn, $queryUser);
-      $result2 = mysqli_query($conn, $queryVoluntario);
+      $result = setQuery($queryUser);
+      $result2 = setQuery($queryVoluntario);
       $sucess =false;
-      if ($result && $result2) {
-        echo "Um novo registo inserido com sucesso";
-        mysqli_close($conn);
-        $sucess = True; 
-         mysqli_free_result($result);
-         mysqli_free_result($result2);
-      } else {
-        echo "Erro: insert failed" . $queryUser . "<br>" . mysqli_error($conn);
+      return ($result && $result2);
     
-      }  
-    
-      // mysqli_free_result($result2);
-       mysqli_close($conn);
-       return   $sucess ;
     }   // SE OCORREU COM SUCESSO VAMOS TER QUE DEVOLVER UM TRUE OU FALSE
     
     

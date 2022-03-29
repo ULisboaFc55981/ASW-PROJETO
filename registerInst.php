@@ -198,7 +198,7 @@ echo "<span class=\"alerta\" > Password em falta*</span>";?>
                         <?php if (in_array('tel', $missing)) 
 echo " Telefone em falta";?>
                     </label>
-                    <input type="number" class="form-control  <?php if (in_array('tel', $missing)) 
+                    <input type="text" pattern="\d*" maxlength="9"  class="form-control  <?php if (in_array('tel', $missing)) 
 echo " isIis-invalid";?>" id="tel" name="tel" value="<?php 
 if(isset($_POST['tel'])) echo $_POST['tel'] ?>">
                 </div>
@@ -315,7 +315,7 @@ if($freguesias > 0 ){
                     <label for="contatoR">Contacto Responsavel:
                         <?php if (in_array('name', $missing)) echo " Contacto em falta";?>
                     </label>
-                    <input type="number" class="form-control" id="contatoR" name="contatoR"
+                    <input type="text" pattern="\d*" maxlength="8"  class="form-control" id="contatoR" name="contatoR"
                         value="<?php if(isset($_POST['contatoR'])) echo $_POST['contatoR'] ?>">
                 </div>
 

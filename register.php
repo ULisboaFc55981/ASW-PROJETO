@@ -128,6 +128,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     
 }
 
+print_r($_POST);
 
 
 ?>
@@ -139,9 +140,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 <!--  verificar se existem erros ou dados em falta -->
 <?php if (count($erros) >0  || count($missing) >0){ echo "
 <p class=\"alerta\">Registro Invalido, por favor corrija os dados</p>";}
-if(isset($erros['pass'])) echo "<p class=\"alerta\">". $erros['pass'] ."</p>";  // secalhar no futuro metemos um foreach dos erros
-
-
+if(isset($erros['pass'])) echo "<p class=\"alerta\">". $erros['pass'] ."</p>"; 
+if(isset($erros['Cconducao'])) echo "<p class=\"alerta\">". $erros['Cconducao'] ."</p>"; 
+if(isset($erros['email'])) echo "<p class=\"alerta\">". $erros['email'] ."</p>"; 
  ?>
 
 
@@ -203,7 +204,7 @@ if(isset($erros['pass'])) echo "<p class=\"alerta\">". $erros['pass'] ."</p>";  
                     <?php if (in_array('tel', $missing)) 
                         echo " Telefone em falta";?>
                 </label>
-                <input type="number"  class="form-control  <?php if (in_array('tel', $missing)) 
+                <input  type="text" pattern="\d*" maxlength="9"  class="form-control  <?php if (in_array('tel', $missing)) 
                         echo " isIis-invalid";?>" id="tel" name="tel" value="<?php 
                        if(isset($_POST['tel'])) echo $_POST['tel'] ?>">
                 </div>

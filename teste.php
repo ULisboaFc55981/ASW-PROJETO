@@ -82,5 +82,8 @@ function registertest(){
 //  `imgPath` varchar(50) DEFAULT NULL
 //) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-   
+$teste =getInstitution(52);
+
+print_r($teste);
+
 ?>

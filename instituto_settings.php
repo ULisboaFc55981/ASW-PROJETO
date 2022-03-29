@@ -1,21 +1,21 @@
 <?php
 
-
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+
 $erros = array();
 $missing = array();
-$data = array();
-
+$dataInstitution = array();
+$dataUser = array();
+  $data = array();
 if($_SERVER["REQUEST_METHOD"] == "GET"){
 
     if(isset($_GET['id'])){
-
-    
-
-
+      
+        $data = getInstitution($_GET['id']);
+        print_r($data);
     }
 
 
@@ -175,10 +175,8 @@ if(isset($erros['pass'])) echo "<p class=\"alerta\">". $erros['pass'] ."</p>";  
             <div class=" row">
                 <div class="col">
                     <label for="nome">Nome:
-                        <?php if (in_array('nome', $missing) ) 
-                                        echo "<span class=\"alerta\" > Introduza Nome*</span>";?>
                     </label>
-                    <input type="text" placeholder="Filipe "  class="form-control <?php if (in_array('nome', $missing)) 
+                    <input type="text" value="<?php echo $data[0]['nome'] ?> "  class="form-control <?php if (in_array('nome', $missing)) 
                                                                     echo " is-invalid";?> " name="nome" id="nome" value="">
 
                 </div>
@@ -188,7 +186,7 @@ if(isset($erros['pass'])) echo "<p class=\"alerta\">". $erros['pass'] ."</p>";  
                                     echo "<span class=\"alerta\" > Introduza Email*</span>";?>
 
                     </label>
-                    <input type="text" class="form-control" id="email" name="email" value="">
+                    <input type="text" class="form-control" value="<?php echo $data[0]['email'] ?>" id="email" name="email" value="">
                     <span class="help-block"> <?php  // texto de ajuda ou aviso)?> </span>
 
                 </div>
@@ -197,9 +195,9 @@ if(isset($erros['pass'])) echo "<p class=\"alerta\">". $erros['pass'] ."</p>";  
 
                 <div class="col">
 
-                    <label for="password">Password:
-                        <?php if (in_array('password', $missing) ) 
-echo "<span class=\"alerta\" > Password em falta*</span>";?>
+                    <label for="password">Mudar Password:
+                        <?php if (in_array('password', $erros) ) 
+echo "<span class=\"alerta\" > Passwords não são iguais*</span>";?>
                     </label>
                     <input type="password" class="form-control" name="password" id="password">
 
@@ -210,7 +208,7 @@ echo "<span class=\"alerta\" > Password em falta*</span>";?>
                         <?php if (in_array('tel', $missing)) 
 echo " Telefone em falta";?>
                     </label>
-                    <input type="number" class="form-control  <?php if (in_array('tel', $missing)) 
+                    <input type="number" value="<?php echo $data[0]['telefone'] ?>" class="form-control  <?php if (in_array('tel', $missing)) 
 echo " isIis-invalid";?>" id="tel" name="tel" value="<?php 
 if(isset($_POST['tel'])) echo $_POST['tel'] ?>">
                 </div>
@@ -219,9 +217,7 @@ if(isset($_POST['tel'])) echo $_POST['tel'] ?>">
             <div class="row">
                 <div class="col">
 
-                    <label for="password2">Repita sua Password:
-                        <?php if (in_array('password2', $missing) ) 
-echo "<span class=\"alerta\" > Password em falta *</span>";?>
+                    <label for="password2">Repita Nova Password:
                     </label>
                     <input type="password" class="form-control" name="password2" id="password2">
                 </div>
@@ -234,7 +230,7 @@ echo " Nome em falta";?>
 
                     </label>
 
-                    <input type="text" class="form-control" id="morada" name="morada"
+                    <input type="text" value="<?php echo $data[0]['morada'] ?>" class="form-control" id="morada" name="morada"
                         value="<?php if(isset($_POST['morada'])) echo $_POST['morada'] ?>">
                 </div>
 
@@ -248,43 +244,46 @@ echo " Nome em falta";?>
                     <label for="dist" class="">
                         Distrito
                     </label>
-                    <select name="cod_distrito" class="form-control" id="dist">
-                        <?php
+                    <select name="codigo_distrito" class="form-control" id="dist">
+                    <?php
 
-$distritos = getDistritos();
-if($distritos > 0 ){
-foreach($distritos as $key => $valor ){
-echo "<option value=" . $valor['cod_distrito'] . ">". $valor['nome']   . "</option>" ; 
-}
+                    $distritos = getDistritos();
+                    if($distritos > 0 ){
+                    foreach($distritos as $key => $valor ){
+                       $option =  "<option ";
+                        if($valor == $data[0]['codig_distrito']){
+                            $option .= " selected='selected' ";
+                        }
+                    echo  $option ." value=" . $valor['cod_distrito'] . ">". $valor['nome']   . "</option>" ; 
+                    }
 
+                    }
+                    ?>
 
-
-}
-
-
-?>
-                    </select>
+                </select>
 
                 </div>
                 <div class="col">
                     <label for="conc" class="">
                         Concelho
                     </label>
-                    <select name="cod_concelho" class="form-control" id="conc">
+                    <select name="codigo_concelho" class="form-control" id="conc">
                         <?php
 
-$concelho = getConcelhos();
-if($concelho > 0 ){
-foreach($concelho as $valor ){
-echo "<option value=" . $valor['cod_concelho'] . ">". $valor['nome'] . "</option>" ; 
-}
+                    $concelho = getConcelhos();
+                    if($concelho > 0 ){
+                    foreach($concelho as $valor ){
+                        $option =  "<option ";
+                        if($valor == $data[0]['codigo_concelho']){
+                            $option .= " selected='selected' ";
+                        }
+                    echo  $option ." value=" . $valor['codigo_concelho'] . ">". $valor['nome']   . "</option>" ; 
+                    
 
+                    }
+                }
 
-
-}
-
-
-?>
+                ?>
                     </select>
 
                 </div>
@@ -292,21 +291,25 @@ echo "<option value=" . $valor['cod_concelho'] . ">". $valor['nome'] . "</option
                     <label for="freg" class="">
                         Freguesia
                     </label>
-                    <select name="cod_freguesia" class="form-control" id="freg">
-                        <?php
+                   <select name="codigo_freguesia" class="form-control" id="freg">
+                    <?php
 
-$freguesias = getFreguesias();
-if($freguesias > 0 ){
-    foreach($freguesias as $freg ){
-        echo "<option value=" . $freg['cod_freguesia'] . ">". $freg['nome'] . "</option>" ; 
-    }
+                        $freguesias = getFreguesias();
+                        if($freguesias > 0 ){
+                            foreach($freguesias as $freg ){
+                                $option =  "<option ";
+                                if($valor == $data[0]['codigo_freguesia']){
+                                    $option .= " selected='selected' ";
+                                }
+                            echo  $option ." value=" . $valor['codigo_freguesia'] . ">". $valor['nome']   . "</option>" ; 
+                            }
+        
 
 
+                        }
 
-}
 
-
-?>
+                        ?>
                     </select>
 
                 </div>
@@ -320,14 +323,14 @@ if($freguesias > 0 ){
                         <?php if (in_array('name', $missing)) 
                 echo " Nome em falta";?>
                     </label>
-                    <input type="text" class="form-control" id="nomeR" name="nomeR"
+                    <input type="text" value="<?php echo $data[0]['nome_contacto'] ?> " class="form-control" id="nomeR" name="nomeR"
                         value="<?php if(isset($_POST['nomeR'])) echo $_POST['nomeR'] ?>">
                 </div>
                 <div class="col">
                     <label for="contatoR">Contacto Responsavel:
                         <?php if (in_array('name', $missing)) echo " Contacto em falta";?>
                     </label>
-                    <input type="number" class="form-control" id="contatoR" name="contatoR"
+                    <input type="number"  value="<?php echo $data[0]['n_contacto'] ?>" class="form-control" id="contatoR" name="contatoR"
                         value="<?php if(isset($_POST['contatoR'])) echo $_POST['contatoR'] ?>">
                 </div>
 
@@ -344,7 +347,7 @@ if($freguesias > 0 ){
                 <?php if (in_array('name', $missing)) 
                 echo " Nome em falta";?>
             </label>
-            <input type="text" class="form-control" id="tipo" name="tipo"
+            <input type="text"  value="<?php echo $data[0]['tipo_inst'] ?>" class="form-control" id="tipo" name="tipo"
                 value="<?php if(isset($_POST['tipo'])) echo $_POST['tipo'] ?>">
         </div>
 
@@ -356,8 +359,8 @@ if($freguesias > 0 ){
         <div class="col">
 
             <label for="description"></label>
-            <textarea class="form-control" name="description" cols="10" rows="4"
-                value="<?php if(isset($_POST['description'])) echo $_POST['description'] ?>"> Breve descrição sobre a sua Instituição
+            <textarea  class="form-control" name="description" cols="10" rows="4"
+                value="<?php if(isset($_POST['description'])) echo $_POST['description'] ?>"> <?php echo $data[0]['descricao'] ?>
 </textarea>
 
 

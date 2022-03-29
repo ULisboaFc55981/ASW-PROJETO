@@ -1,8 +1,23 @@
 
-<?php if(!isLoggedIn()){ 
-    header( "Location: /asw/admin/index.php?page=login" );
+<?php 
+$data= array();
+//if(!isLoggedIn()){ 
+  //  header( "Location: /asw/admin/index.php?page=login" );
+//}
+if(isset($_GET['search'])){ 
+  
+    if($_GET['search']==='all'){
+    
+    $data = getAllUsers();
+
+    }
+
+}else{
+
+    header( "Location: /asw/admin/index.php");
 }
 
+print_r($data);
 ?>
 
 
@@ -15,6 +30,8 @@
         
     <h1>Procura</h1>
     <table class="table table-striped table-hover">
+      <!--- 
+        ?>-->
     <tr>
           <td class="table-light">...</td>
     </tr>

@@ -13,6 +13,7 @@ echo "\n";
 echo "<br>";
 echo realpath(__FILE__);
 
+$data = getAllUsers();
 
-
+print_r($data);
 ?>

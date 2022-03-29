@@ -2,7 +2,6 @@
 $tipo;
 $erros= array();
 $missing = array();
-print_r($_POST);
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     // e caso a variavel submit esteja assignada
@@ -31,7 +30,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
               
              
                if($result){
-                  header('Location: Location: index.php?page=voluntario_settings.php?id='. $data['id']);
+                  header('Location: Location: index.php?page=voluntario_settings?id='. $data['id']);
                   die();
                }else{
                  $erros = "Usuario não existe";
@@ -44,7 +43,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
               
              
               if($result){
-                 header('Location: index.php?page=instituto_settings.php?id='. $data['id']);
+                 header('Location: index.php?page=instituto_settings&id='. $data['id']);
                  die();
               }else{
                 $erros = "Usuario não existe";
