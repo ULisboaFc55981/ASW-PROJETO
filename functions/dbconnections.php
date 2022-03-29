@@ -18,7 +18,7 @@ function getConnection(){
     
   }
 
-  
+  //Obter todos os distritos
   function getDistritos()
   {
     $conn = getConnection();
@@ -39,7 +39,7 @@ function getConnection(){
   
   
 
-
+  //Obter todos os distritos
   
   function getFreguesias()
   {
@@ -60,7 +60,7 @@ function getConnection(){
   }
   
   
-  
+    //Obter todos os Concelhos
   function getConcelhos()
   {
     $conn = getConnection();
@@ -79,6 +79,8 @@ function getConnection(){
     return $column;
   }
   
+  
+
   
   function getAllUsers()
   {
@@ -137,6 +139,34 @@ function getConnection(){
     }
     mysqli_close($conn);
     return $column;
+  }
+  function existsVoluntarioID($id){
+    $conn = getConnection();
+    $query = "SELECT * FROM Voluntario WHERE id_U = '{$id}'"; 
+    $result = mysqli_query($conn, $query);
+    $exists = false;
+  
+    if (mysqli_num_rows($result) > 0) {
+     $exists = true;
+    } 
+    mysqli_close($conn);
+    return $exists;
+  }
+
+  
+
+  function existsInstitutoID($id){
+    $conn = getConnection();
+    $query = "SELECT * FROM Instituicao WHERE id_U = '{$id}'"; 
+    $result = mysqli_query($conn, $query);
+    $exists = false;
+  
+    if (mysqli_num_rows($result) > 0) {
+     $exists = true;
+    } 
+    mysqli_close($conn);
+    return $exists;
+    
   }
   
   
