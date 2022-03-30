@@ -260,19 +260,12 @@ echo "<option value=" . $valor['cod_distrito'] . ">". $valor['nome']   . "</opti
                     </label>
                     <select name="cod_concelho" class="form-control" id="conc">
                         <?php
-
-$concelho = getConcelhos();
-if($concelho > 0 ){
-foreach($concelho as $valor ){
-echo "<option value=" . $valor['cod_concelho'] . ">". $valor['nome'] . "</option>" ; 
-}
-
-
-
-}
-
-
-?>
+                            $concelho = getConcelhos();
+                            if($concelho > 0 ){
+                                foreach($concelho as $valor ){
+                                echo "<option value=" . $valor['cod_concelho'] . ">". $valor['nome'] . "</option>" ; 
+                                }
+                            }?>
                     </select>
 
                 </div>

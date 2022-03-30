@@ -4,9 +4,10 @@ $data= array();
 //if(!isLoggedIn()){ 
   //  header( "Location: /asw/admin/index.php?page=login" );
 //}
-if(isset($_GET['search'])){ 
+if(isset($POST['search'])){ 
   
-    if($_GET['search']==='all'){
+  
+    if($POST['search']==='all'){
     
     $data = getAllUsers();
 
