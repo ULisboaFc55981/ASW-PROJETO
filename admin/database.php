@@ -57,6 +57,35 @@ function getFreguesiaById($idConc,$idFreg){   // VERIFICAR se esta correto
 
 }
 
+function getAllUsers()
+  {
+    $conn = getConnection();
+    $query = "SELECT * FROM Utilizador";
+    $result = mysqli_query($conn,$query);
+    $data = array();
+    if (mysqli_num_rows($result) > 0) {
+    
+        $data = array();
+        
+       while($data = mysql_fetch_array($result)){
+        echo $data['nome'];
+
+       } 
+    
+       
+      
+
+
+
+      } else {
+      echo "0 results";
+    }
+  mysqli_close($conn);
+
+    
+  }
+  
+
 function getConcelhoById($id){
 
   $conn = getConnection();
@@ -123,21 +152,6 @@ return $column;
 
   ///// FUNÇÕES USUARIOS 
   
-function getAllUsers(){
-  $conn = getConnection();
-  $query = "SELECT * FROM Utilizador";;
-  $result = mysqli_query($conn,$query);
-  
-  
-  if (mysqli_num_rows($result) > 0) {
-    $column = mysqli_fetch_assoc($result);
-  } else {
-    echo "0 results";
-  }
-mysqli_close($conn);
-return $column;
-  }
-
 
 function getAllVolunters(){
   $conn = getConnection();

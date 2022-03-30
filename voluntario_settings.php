@@ -4,6 +4,11 @@
 
 
 
+
+
+$dataVol = array();
+$dataUser = array();
+$dataNova = array();
 $erros = array();
 $missing = array();
 $data = array();
@@ -15,11 +20,13 @@ error_reporting(E_ALL);
 $erros = array();
 $missing = array();
 $data = array();
-
+$id;
 if($_SERVER["REQUEST_METHOD"] == "GET"){
 
     if(isset($_GET['id'])){
-
+        $id = $_GET['id'];
+        $data = getVoluntario($_GET['id']);
+        print_r($data);
     
 
 
@@ -40,33 +47,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     
     }else{
         $data['nome'] = htmlspecialchars($_POST['nome']);
-        $data['nome'] = stripcslashes($data['nome']);
-    }   
-      // e caso a variavel passwor não  esteja assignada
-    if(empty($_POST['password'])){
-    array_push($missing ,"password");
-    }else{
-        $data['password'] = password_hash($_POST['password'], PASSWORD_BCRYPT);
-
-    }
-    if(empty($_POST['password2'])){
-        array_push($missing ,"password2");
-        }else{
-            $passRepetition= password_hash($_POST['password2'], PASSWORD_BCRYPT);
     
-        }
-      // e caso a variavel email não esteja assignada
-    if(empty($_POST['email'])){
-        array_push($missing ,"email");
-   }else{
-       $data['email'] = htmlspecialchars($_POST['email']);
-       $data['email'] = stripcslashes( $data['email']);
-        $checkResult = userExistsByEmail($data['email']);
-             if($checkResult){
-                  $erros['email']= "Utilizador com email" . $data['email'] . " já existe.";
-            }
-      }   
-     // e caso a variavel cc não esteja assignada
      if(empty($_POST['tel'])){
         array_push($missing ,"tel");
     } else{
@@ -80,19 +61,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $data['cc'] = stripcslashes($data['cc']);
     }
      // e caso a variavel Cconducao não esteja assignada
-    if(empty($_POST['Cconducao'])){
-        array_push($missing ,"Cconducao");
-    } else{
-        // caso contrario trata a informação e pede a função da database para ver se já existe,
-        // caso existe adiciona a array erros;
-        $data['Cconducao'] = htmlspecialchars($_POST['Cconducao']);
-        $data['Cconducao']  = stripcslashes(  $data['Cconducao'] );
-        $checkResult = userExistsByCondC($data['Cconducao'] );
-        if($checkResult){
-         $erros['Cconducao']= "Utilizador com email" . $_POST['Cconducao'] . " já existe.";
-        }
-       // e caso a variavel gen não esteja assignada  
-    }if(empty($_POST['dob'])){
+      }if(empty($_POST['dob'])){
         array_push($missing ,"dob");
     }else{
         $data['dob'] = htmlspecialchars($_POST['dob']);
@@ -104,10 +73,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     }else{
         $data['genero'] = htmlspecialchars($_POST['genero']);
         $data['genero']  = stripcslashes(  $data['genero'] );
-    }
-    if(isset($pass)&& isset($passRepetition)){
-    if($pass !== $passRepetition){
-        $erros['pass'] = "Passwords não são identicas";
     }
     
     }
@@ -121,7 +86,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $data['cod_concelho'] = strip_tags($data['cod_concelho']);
         $data['cod_freguesia'] = strip_tags($data['cod_freguesia']);
     //para cada valor do pos tratar e adicionar a uma array associativa
-   $result = RegisterVoluntario($data);
+   $result = RegisterVoluntario($data,$id);
         if($result){
             //caso o resultado seja positivo ir para o index
             session_start();

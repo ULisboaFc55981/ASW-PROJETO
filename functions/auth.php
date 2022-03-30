@@ -14,15 +14,32 @@ function loginUser($email, $password){
        if(password_verify($password, $user['pass'])){
 
      
-        $_SESSION['tipo'] = $user['tipo'];          
-        $_SESSION['user'] = strtok($user['username'], " ");
+        $_SESSION['tipo'] = $user['tipo'];
+        $nomeExploded = array();   
+        $nomeExploded = explode(" ", $user['nome']);       
+        $_SESSION['user'] = $nomeExploded[0];
         $_SESSION['email'] = $user['email'];     
-        $_SESSION['id'] = $user['id_U'];
+        $_SESSION['id'] = $user['id'];
         $_SESSION['logged']= true;
+        header('Location: index.php?page=home');
+        die();
        }
     }
 
     return $loginState;
+}
+function isLoggedIn(){
+  $result =false;
+  if (session_status() === PHP_SESSION_NONE) {
+      session_start();
+      $_SESSION = array();
+  }  
+  if(!empty($_SESSION)){
+      if($_SESSION['logged']){
+       $result = true;
+      }
+  }
+  return $result;
 }
 
 
@@ -33,27 +50,29 @@ function isLoggedInVoluntario(){
         $_SESSION = array();
     }  
     if(!empty($_SESSION)){
-        if($_SESSION['tipo'] === "Voluntario" && $_SESSION['logged']==TRUE){
+        if($_SESSION['tipo'] === "Voluntario"){
          $result = true;
         }
     }
     return $result;
 }
-function isLoggedInInstitute(){
-    $result =false;
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-        $_SESSION = array();
-    }  
-    if(!empty($_SESSION)){
-        if($_SESSION['tipo'] === "Instituto" && $_SESSION['logged']==TRUE){
-         $result = true;
-        }
-    }
-    }
+function isLoggedInInstitute(){ $result =false;
+  if (session_status() === PHP_SESSION_NONE) {
+      session_start();
+      $_SESSION = array();
+  }  
+  if(!empty($_SESSION)){
+      if($_SESSION['tipo'] === "Instituto"){
+       $result = true;
+      }
+  }
+  return $result;
+}
+    
     
     function RegisterVoluntario($dados)
     { 
+        $conn = getConnection();
       
       $queryUser = "INSERT INTO Utilizador (email, tipo, telefone, pass, nome, codigo_distrito, codigo_concelho, codigo_freguesia) ";
       $queryUser .= " VALUES ( \"{$dados['email']}\" , \"Voluntario\" , {$dados['tel']} , '{$dados['password']}' , \"{$dados['nome']}\" , {$dados['cod_distrito']} , {$dados['cod_concelho']}, {$dados['cod_freguesia']}); ";
@@ -61,13 +80,24 @@ function isLoggedInInstitute(){
      $queryVoluntario ="INSERT INTO Voluntario (id_U ,cc, carta_conducao, genero, dob)";
      $queryVoluntario .=  "VALUES (LAST_INSERT_ID(), \"{$dados['cc']}\" ,  \"{$dados['Cconducao']}\" ,   \"{$dados['genero']}\" ,   \"{$dados['dob']}\"  );";
    
-      $result = setQuery($queryUser);
-      $result2 = setQuery($queryVoluntario);
-      $sucess =false;
-      return ($result && $result2);
-    
-    }   // SE OCORREU COM SUCESSO VAMOS TER QUE DEVOLVER UM TRUE OU FALSE
-    
+     $result = mysqli_query($conn,  $queryUser);
+     $result2 = mysqli_query($conn, $queryVoluntario);
+     $sucess =false;
+     if ($result && $result2) {
+       echo "Um novo registo inserido com sucesso";
+       mysqli_close($conn);
+       $sucess = True; 
+        mysqli_free_result($result);
+        mysqli_free_result($result2);
+     } else {
+       echo "Erro: insert failed" . $queryUser . "<br>" . mysqli_error($conn);
+   
+     }  
+     // mysqli_free_result($result2);
+      mysqli_close($conn);
+      return   $sucess ;
+   }   // SE OCORREU COM SUCESSO VAMOS TER QUE DEVOLVER UM TRUE OU FALSE
+   
     
     function RegisterInstitution($dados)
     { 

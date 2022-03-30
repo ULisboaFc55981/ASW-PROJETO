@@ -1,24 +1,15 @@
 
 <?php 
 $data= array();
-//if(!isLoggedIn()){ 
-  //  header( "Location: /asw/admin/index.php?page=login" );
-//}
-if(isset($POST['search'])){ 
-  
-  
-    if($POST['search']==='all'){
+
     
-    $data = getAllUsers();
+$data=array();
+$data = getAllUsers();
 
-    }
+foreach($data as $test){
+print_r($test);
 
-}else{
-
-    header( "Location: /asw/admin/index.php");
 }
-
-print_r($data);
 ?>
 
 

@@ -8,6 +8,26 @@ $erros = array();
 $missing = array();
 $data = array();
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+$erros = array();
+$missing = array();
+$data = array();
+
+if($_SERVER["REQUEST_METHOD"] == "GET"){
+
+    if(isset($_GET['id'])){
+
+    
+
+
+    }
+
+
+
+}
 
 //Caso tenha sido feito um pedido Post
 if($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -139,9 +159,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 <!--  verificar se existem erros ou dados em falta -->
 <?php if (count($erros) >0  || count($missing) >0){ echo "
 <p class=\"alerta\">Registro Invalido, por favor corrija os dados</p>";}
-if(isset($erros['pass'])) echo "<p class=\"alerta\">". $erros['pass'] ."</p>"; 
-if(isset($erros['Cconducao'])) echo "<p class=\"alerta\">". $erros['Cconducao'] ."</p>"; 
-if(isset($erros['email'])) echo "<p class=\"alerta\">". $erros['email'] ."</p>"; 
+if(isset($erros['pass'])) echo "<p class=\"alerta\">". $erros['pass'] ."</p>";  // secalhar no futuro metemos um foreach dos erros
+
+
  ?>
 
 
@@ -203,7 +223,7 @@ if(isset($erros['email'])) echo "<p class=\"alerta\">". $erros['email'] ."</p>";
                     <?php if (in_array('tel', $missing)) 
                         echo " Telefone em falta";?>
                 </label>
-                <input  type="text" pattern="\d*" maxlength="9"  class="form-control  <?php if (in_array('tel', $missing)) 
+                <input type="number"  class="form-control  <?php if (in_array('tel', $missing)) 
                         echo " isIis-invalid";?>" id="tel" name="tel" value="<?php 
                        if(isset($_POST['tel'])) echo $_POST['tel'] ?>">
                 </div>
@@ -215,7 +235,7 @@ if(isset($erros['email'])) echo "<p class=\"alerta\">". $erros['email'] ."</p>";
                     echo "<span class=\"alerta\" > Em Falta *</span>";?>
 
                 </label>
-                <input type="number" type="text" pattern="\d*" maxlength="8"  class="form-control" name="cc" id="cc">  
+                <input type="number"  class="form-control" name="cc" id="cc">  
 
         </div>
 
@@ -226,7 +246,7 @@ if(isset($erros['email'])) echo "<p class=\"alerta\">". $erros['email'] ."</p>";
                     echo "<span class=\"alerta\" > Em Falta *</span>";?>
             </label>
 
-            <input type="number"  type="text" pattern="\d*" maxlength="8"  class="form-control" name="Cconducao" id="Cconducao">
+            <input type="number"  class="form-control" name="Cconducao" id="Cconducao">
 
         </div>
         <div class="col">

@@ -7,16 +7,16 @@ error_reporting(E_ALL);
 
 $erros = array();
 $missing = array();
-$dataInstitution = array();
-$dataUser = array();
-$dataNova = array();
+$utilizador = array();
+$utilizador = array();
   $data = array();
+
 if($_SERVER["REQUEST_METHOD"] == "GET"){
 
     if(isset($_GET['id'])){
-      
+        $id = $_GET['id'];
         $data = getInstitution($_GET['id']);
-        print_r($data);
+
     }
 
 
@@ -33,40 +33,16 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     array_push($missing, 'nome');    
     
     }else{
-        $data['nome'] = htmlspecialchars($_POST['nome']);
-        $data['nome'] = stripcslashes($data['nome']);
+        $utilizador['nome'] = htmlspecialchars($_POST['nome']);
+        $utilizador['nome'] = stripcslashes($utilizador['nome']);
     }   
-      // e caso a variavel passwor não  esteja assignada
-    
-    if(empty($_POST['password'])){
-    array_push($missing ,"password");
-    }else{
-        $data['password'] = password_hash($_POST['password'], PASSWORD_BCRYPT);
-
-    }
-    if(empty($_POST['password2'])){
-        array_push($missing ,"password2");
-        }else{
-            $passRepetition= password_hash($_POST['password2'], PASSWORD_BCRYPT);
-    
-        }
-      // e caso a variavel email não esteja assignada
-    if(empty($_POST['email'])){
-        array_push($missing ,"email");
-   }else{
-       $data['email'] = htmlspecialchars($_POST['email']);
-       $data['email'] = stripcslashes( $data['email']);
-        $checkResult = userExistsByEmail($data['email']);
-             if($checkResult){
-                  $erros['email']= "Utilizador com email" . $data['email'] . " já existe.";
-            }
-      }   
-     // e caso a variavel cc não esteja assignada
-     if(empty($_POST['tel'])){
-        array_push($missing ,"tel");
+   
+   // e caso a variavel cc não esteja assignada
+     if(empty($_POST['telefone'])){
+        array_push($missing ,"telefone");
     } else{
-        $data['tel'] = htmlspecialchars($_POST['tel']);
-        $data['tel'] = stripcslashes($data['tel']);  
+        $utilizador['telefone'] = htmlspecialchars($_POST['telefone']);
+        $utilizador['telefone'] = stripcslashes($utilizador['telefone']);  
     }
   
      // e caso a variavel Cconducao não esteja assignada
@@ -75,60 +51,55 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     } else{
         // caso contrario trata a informação e pede a função da database para ver se já existe,
         // caso existe adiciona a array erros;
-        $data['morada'] = htmlspecialchars($_POST['morada']);
-        $data['morada']  = stripcslashes(  $data['morada'] );
-        $checkResult = userExistsByCondC($data['morada'] );
-     
+        $instituto['morada'] = htmlspecialchars($_POST['morada']);
+        $instituto['morada']  = stripcslashes(  $instituto['morada'] );
+      
        // e caso a variavel gen não esteja assignada  
-    }if(empty($_POST['nomeR'])){
-        array_push($missing ,"nomeR");
+    }if(empty($_POST['nome_contacto'])){
+        array_push($missing ,"nome_contacto");
     }else{
-        $data['nomeR'] = htmlspecialchars($_POST['nomeR']);
-        $data['nomeR']  = stripcslashes(  $data['nomeR'] );
+        $instituto['nome_contacto'] = htmlspecialchars($_POST['nome_contacto']);
+        $instituto['nome_contacto']  = stripcslashes(  $instituto['nome_contacto'] );
        
     }
-    if(empty($_POST['contatoR'])){
-        array_push($missing ,"contatoR");
+    if(empty($_POST['n_contacto'])){
+        array_push($missing ,"n_contacto");
     }else{
-        $data['contatoR'] = htmlspecialchars($_POST['contatoR']);
-        $data['contatoR']  = stripcslashes(  $data['contatoR'] );
+        $instituto['n_contacto'] = htmlspecialchars($_POST['n_contacto']);
+        $instituto['n_contacto']  = stripcslashes(  $instituto['n_contacto'] );
     
     }
-    if(empty($_POST['description'])){
-        array_push($missing ,"description");
+    if(empty($_POST['descricao'])){
+        array_push($missing ,"descricao");
 
     }else{
-        $data['description'] = htmlspecialchars($_POST['description']);
-        $data['description']  = stripcslashes(  $data['description'] );
+        $instituto['descricao'] = htmlspecialchars($_POST['descricao']);
+        $instituto['descricao']  = stripcslashes(  $instituto['descricao'] );
         
     }
 
-    if(empty($_POST['tipo'])){
-        array_push($missing ,"description");
+    if(empty($_POST['tipo_inst'])){
+        array_push($missing ,"tipo_inst");
 
     }else{
-        $data['tipo'] = htmlspecialchars($_POST['tipo']);
-        $data['tipo']  = stripcslashes(  $data['tipo'] );
+        $instituto['tipo_inst'] = htmlspecialchars($_POST['tipo_inst']);
+        $instituto['tipo_inst']  = stripcslashes(  $instituto['tipo_inst'] );
         
     }
 
-    if(isset($pass)&& isset($passRepetition)){
-    if($pass !== $passRepetition){
-        $erros['pass'] = "Passwords não são identicas";
-    }
-    
-    }
+
     // se não houve[r erros ou valores vazios
     if(empty($missing) && empty($erros)){
-        $data['cod_distrito'] = htmlspecialchars($_POST['cod_distrito']);
-        $data['cod_concelho'] = htmlspecialchars($_POST['cod_concelho']);
-        $data['cod_freguesia'] = htmlspecialchars($_POST['cod_freguesia']);
-        $data['cod_distrito'] = strip_tags($data['cod_distrito']);
-        $data['cod_concelho'] = strip_tags($data['cod_concelho']);
-        $data['cod_freguesia'] = strip_tags($data['cod_freguesia']);
+        $utilizador['codigo_distrito'] = htmlspecialchars($_POST['codigo_distrito']);
+        $utilizador['codigo_concelho'] = htmlspecialchars($_POST['codigo_distrito']);
+        $utilizador['codigo_freguesia'] = htmlspecialchars($_POST['codigo_freguesia']);
+        $utilizador['codigo_distrito'] = strip_tags($utilizador['codigo_distrito']);
+        $utilizador['codigo_concelho'] = strip_tags($utilizador['codigo_concelho']);
+        $utilizador['codigo_freguesia'] = strip_tags($utilizador['codigo_freguesia']);
     //para cada valor do pos tratar e adicionar a uma array associativa
-   $result = RegisterInstitution($data);
-        if($result){
+   $result = updateValuesUtilizador($utilizador,$_GET['id']);
+   $result2 = updateValuesInstituto($instituto,$_GET['id']);
+        if($result && $result2){
             //caso o resultado seja positivo ir para o index
             session_start();
         
@@ -182,48 +153,23 @@ if(isset($erros['pass'])) echo "<p class=\"alerta\">". $erros['pass'] ."</p>";  
                                                                     echo " is-invalid";?> " name="nome" id="nome" value="">
 
                 </div>
-                <div class="col">
-                    <label for="email">Email:
-                        <?php if (in_array('email', $missing) ) 
-                                    echo "<span class=\"alerta\" > Introduza Email*</span>";?>
-
-                    </label>
-                    <input type="text" class="form-control" value="<?php echo $data[0]['email'] ?>" id="email" name="email" value="">
-                    <span class="help-block"> <?php  // texto de ajuda ou aviso)?> </span>
-
-                </div>
+              
             </div>
             <div class="row">
 
                 <div class="col">
-
-                    <label for="password">Mudar Password:
-                        <?php if (in_array('password', $erros) ) 
-echo "<span class=\"alerta\" > Passwords não são iguais*</span>";?>
-                    </label>
-                    <input type="password" class="form-control" name="password" id="password">
-
-                </div>
-
-                <div class="col">
-                    <label for="tel">Telefone:
+                    <label for="telefone">Telefone:
                         <?php if (in_array('tel', $missing)) 
 echo " Telefone em falta";?>
                     </label>
-                    <input type="number" value="<?php echo $data[0]['telefone'] ?>" class="form-control  <?php if (in_array('tel', $missing)) 
-echo " isIis-invalid";?>" id="tel" name="tel" value="<?php 
+                    <input type="number" value="<?php echo $data[0]['telefone'] ?>" class="form-control  <?php if (in_array('telefone', $missing)) 
+echo " isIis-invalid";?>" id="telefone" name="telefone" value="<?php 
 if(isset($_POST['tel'])) echo $_POST['tel'] ?>">
                 </div>
             </div>
 
             <div class="row">
-                <div class="col">
-
-                    <label for="password2">Repita Nova Password:
-                    </label>
-                    <input type="password" class="form-control" name="password2" id="password2">
-                </div>
-
+               
                 <div class="col">
 
                     <label for="morada">Morada
@@ -321,19 +267,19 @@ echo " Nome em falta";?>
             <div class="row">
                 <div class="col">
 
-                    <label for="nomeR">Nome Responsavel:
-                        <?php if (in_array('name', $missing)) 
+                    <label for="nome_contacto">Nome Responsavel:
+                        <?php if (in_array('nome_contacto', $missing)) 
                 echo " Nome em falta";?>
                     </label>
-                    <input type="text" value="<?php echo $data[0]['nome_contacto'] ?> " class="form-control" id="nomeR" name="nomeR"
-                        value="<?php if(isset($_POST['nomeR'])) echo $_POST['nomeR'] ?>">
+                    <input type="text" value="<?php echo $data[0]['nome_contacto'] ?> " class="form-control" id="nome_contacto" name="nome_contacto"
+                        value="<?php if(isset($_POST['nome_contacto'])) echo $_POST['nome_contacto'] ?>">
                 </div>
                 <div class="col">
                     <label for="contatoR">Contacto Responsavel:
                         <?php if (in_array('name', $missing)) echo " Contacto em falta";?>
                     </label>
-                    <input type="number"  value="<?php echo $data[0]['n_contacto'] ?>" class="form-control" id="contatoR" name="contatoR"
-                        value="<?php if(isset($_POST['contatoR'])) echo $_POST['contatoR'] ?>">
+                    <input type="number"  value="<?php echo $data[0]['n_contacto'] ?>" class="form-control" id="n_contacto" name="n_contacto"
+                        value="<?php if(isset($_POST['n_contacto'])) echo $_POST['n_contacto'] ?>">
                 </div>
 
             </div>
@@ -345,12 +291,12 @@ echo " Nome em falta";?>
     <div class="row">
         <div class="col">
 
-            <label for="tipo">Tipo de Instituição:
-                <?php if (in_array('name', $missing)) 
+            <label for="tipo_inst">Tipo de Instituição:
+                <?php if (in_array('tipo_inst', $missing)) 
                 echo " Nome em falta";?>
             </label>
-            <input type="text"  value="<?php echo $data[0]['tipo_inst'] ?>" class="form-control" id="tipo" name="tipo"
-                value="<?php if(isset($_POST['tipo'])) echo $_POST['tipo'] ?>">
+            <input type="text"  value="<?php echo $data[0]['tipo_inst'] ?>" class="form-control" id="tipo_inst" name="tipo_inst"
+                value="<?php if(isset($_POST['tipo_inst'])) echo $_POST['tipo_inst'] ?>">
         </div>
 
     </div>
@@ -360,9 +306,9 @@ echo " Nome em falta";?>
 
         <div class="col">
 
-            <label for="description"></label>
-            <textarea  class="form-control" name="description" cols="10" rows="4"
-                value="<?php if(isset($_POST['description'])) echo $_POST['description'] ?>"> <?php echo $data[0]['descricao'] ?>
+            <label for="descricao"></label>
+            <textarea  class="form-control" name="descricao" cols="10" rows="4"
+                value="<?php if(isset($_POST['descricao'])) echo $_POST['descricao'] ?>"> <?php echo $data[0]['descricao'] ?>
 </textarea>
 
 

@@ -96,8 +96,35 @@
     $result = getQuery($query);
      return $result;
   }
-
   
+  function getConcelhosById($id)
+  {
+    $conn = getConnection();
+    $query = "SELECT * FROM Concelho  WHERE Concelho.cod_concelho = '{$id}' "; 
+    $result = array();
+    $result = getQuery($query);
+     return $result;
+  }
+
+   
+  function getDistritoById($id)
+  {
+    $conn = getConnection();
+    $query = "SELECT * FROM Distrito  WHERE Distrito.cod_distrito = '{$id}'"; 
+    $result = array();
+    $result = getQuery($query);
+     return $result;
+  }
+  
+  function getFreguesiaById($id)
+  {
+    $conn = getConnection();
+    $query = "SELECT * FROM Freguesia  WHERE Freguesia.codigo_freguesia = '{$id}' "; 
+    $result = array();
+    $result = getQuery($query);
+     return $result;
+  }
+
   function getDonationByInstitute($id)
   {
     $conn = getConnection();
@@ -147,28 +174,38 @@
     function updateValuesVoluntario($values, $id){
       $conn = getConnection();
       $query = "UPDATE Voluntario SET " ;
-
+      $num = count($values);
+      $i = 1;
     foreach($values as $key=>$value){
-        $query .= $key . "=" . $value;
+        $query .= $key . "=" .  '"' .$value . '"';
+        if($i < $num ){
+          $query .= ",";
+        }
+        $i+=1;
     }
 
-    $query .= "WHERE id_U = {$id}"; 
+    $query .= " WHERE Voluntario.id_U = {$id};";
+     
 
     $result =setQuery($query);
     return $result;
     }
 function updateValuesUtilizador($values, $id){
       $conn = getConnection();
-      $query = "UPDATE Instituto SET " ;
-    
+      $query = "UPDATE Utilizador SET " ;
+      $num = count($values);
+      $i = 1;
       foreach($values as $key=>$value){
     
-        $query .= $key . "=" . $value;
-    
+        $query .= $key . "=" .  '"' .$value . '"';
+        if($i < $num ){
+          $query .= ",";
+        }
+        $i+=1;
     
       }
 
-      $query .= "WHERE id = {$id}"; 
+      $query .= " WHERE Utilizador.id = {$id};"; 
       $result =setQuery($query);
       return $result;
     
@@ -177,13 +214,18 @@ function updateValuesUtilizador($values, $id){
 
 function updateValuesInstituto($values, $id){
   $conn = getConnection();
-  $query = "UPDATE Instituto SET " ;
-
+  $query = "UPDATE Instituicao SET " ;
+  $num = count($values);
+      $i = 1;
   foreach($values as $key=>$value){
-    $query .= $key . "=" . $value;
+    $query .= $key . "=" .  '"' .$value . '"' ;
+    if($i < $num ){
+      $query .= ",";
+    }
+    $i+=1;
   }
 
-  $query .= "WHERE id_U = {$id}"; 
+  $query .= " WHERE Instituicao.id_U = {$id};"; 
 
   $result =setQuery($query);
   return $result;

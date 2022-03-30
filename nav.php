@@ -10,8 +10,7 @@
         
     <div class="col "><h1><a href="index.php"><img src="img/header.png" height="80" width="150"> </a></h1></div>
      <?php if(isLoggedInInstitute()) : ?>
-      <div class="col">
-      </div class>
+
       <?php endif;?>
       <?php if(isLoggedInVoluntario()) : ?>
 
@@ -24,7 +23,7 @@
 
 
        <!-- Caso seja instituto --> 
-    <?php if(isLoggedInInstitute()) : ?>
+    <?php if( isLoggedIn() && isLoggedInInstitute()) : ?>
 
       <nav class=" navbar-expand-sm bg-primary navbar-dark">
   <!-- Brand -->
@@ -49,20 +48,20 @@
       <a class="nav-link" href="#">Mensagens</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="<?php echo 'settings.php' . '?id=' . $_SESSION['id']  ?>">Preferências</a>
+      <a class="nav-link" href="<?php echo 'index.php' . '?page=' . "instituto_settings" . "&id=". $_SESSION['id']  ?>">Preferências</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="<?php echo 'profile.php' . '?id=' . $_SESSION['id']  ?>">Meu Perfil</a>
+      <a class="nav-link" href="<?php echo 'index.php' . '?page=' . "perfil_instituto" . "&id=". $_SESSION['id']  ?>">Meu Perfil</a>
     </li>
   </ul>
   
 
     
 </nav>
-     <?php endif?>
+
 
     <!-- Caso seja voluntario -->
-     <?php if(isLoggedInVoluntario()) : ?>
+     <?php elseif(isLoggedIn() && isLoggedInVoluntario()): ?>
 
       <nav class=" navbar-expand-sm bg-primary navbar-dark">
   <!-- Brand -->
@@ -97,10 +96,10 @@
 
     
 </nav>
-    <?php endif?>
+  
 
 
-    <?php if(!isLoggedInVoluntario() || !isLoggedInInstitute()) : ?>
+    <?php else : ?>
 
       <nav class=" navbar-expand-sm bg-primary navbar-dark">
   <!-- Brand -->
@@ -125,7 +124,7 @@
       <a class="nav-link" href="<?php echo 'index.php' . '?page=' . "changeSettings" ?>">Alterar Dados</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#">Contacto</a>
+      <a class="nav-link" href="<?php echo 'index.php' . '?page=' . "open_profile" ?>">Ver Perfil</a>
     </li>
 
   </ul>

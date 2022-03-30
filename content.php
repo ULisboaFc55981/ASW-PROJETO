@@ -9,7 +9,7 @@
     </div>
     <div class="col">
         <div class="text-center">
-            <img src="img/test.jpg" class="rounded" alt="..."height="350px">
+            <img src="img/food-donate.jpg" class="rounded" alt="..."height="350px">
           </div>
     </div>
     </article>

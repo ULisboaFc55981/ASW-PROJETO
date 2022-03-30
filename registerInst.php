@@ -63,8 +63,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         // caso existe adiciona a array erros;
         $data['morada'] = htmlspecialchars($_POST['morada']);
         $data['morada']  = stripcslashes(  $data['morada'] );
-        $checkResult = userExistsByCondC($data['morada'] );
-     
+    
        // e caso a variavel gen não esteja assignada  
     }if(empty($_POST['nomeR'])){
         array_push($missing ,"nomeR");
