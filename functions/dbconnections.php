@@ -24,14 +24,34 @@ function getConnection(){
     $data = array();
     if(mysqli_num_rows($result) > 0){
       $data = array();
+      
       foreach ($result as $key => $value) {
         $data[$key] = $value;
       }
       
       mysqli_free_result($result);
-      mysqli_close($conn);
-
+     
     }
+     mysqli_close($conn);
+
+    return $data;
+  }
+  function getOneResultQuery($query){
+    $conn = getConnection();
+    $result = mysqli_query($conn, $query);
+    $data = array();
+    if(mysqli_num_rows($result) ==1 ){
+      $data = array();
+      
+      $data = mysql_fetch_assoc($result);
+      mysqli_free_result($result);
+     
+
+  
+
+    } 
+    
+    mysqli_close($conn);
     return $data;
   }
   
@@ -46,6 +66,7 @@ function getConnection(){
       $bool = false;
     }
     return $bool;
+    mysqli_close($conn);
   }
 
   function setQuery($query)

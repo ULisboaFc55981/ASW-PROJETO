@@ -13,5 +13,5 @@
     <link href="https://fonts.googleapis.com/css2?family=Supermercado+One&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
-    <title><?php echo $WEBSITE_NAME . ' - ' . $pageDescription ?></title>
+    <title><?php echo $pageTittle ?></title>
 </head>

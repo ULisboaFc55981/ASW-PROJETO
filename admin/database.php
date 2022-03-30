@@ -12,7 +12,9 @@ function getConnection(){
       }
       return $conn;
     
-  }
+  }   
+
+  ///// FUNÇÕES LOCALIDADES 
   
 function getFreguesias(){
 $conn = getConnection();
@@ -119,6 +121,7 @@ mysqli_close($conn);
 return $column;
   }
 
+  ///// FUNÇÕES USUARIOS 
   
 function getAllUsers(){
   $conn = getConnection();
@@ -135,7 +138,7 @@ mysqli_close($conn);
 return $column;
   }
 
-  
+
 function getAllVolunters(){
   $conn = getConnection();
   $query = "SELECT * FROM Voluntarios";;

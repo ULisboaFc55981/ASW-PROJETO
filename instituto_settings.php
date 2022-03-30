@@ -9,6 +9,7 @@ $erros = array();
 $missing = array();
 $dataInstitution = array();
 $dataUser = array();
+$dataNova = array();
   $data = array();
 if($_SERVER["REQUEST_METHOD"] == "GET"){
 
@@ -36,6 +37,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $data['nome'] = stripcslashes($data['nome']);
     }   
       // e caso a variavel passwor não  esteja assignada
+    
     if(empty($_POST['password'])){
     array_push($missing ,"password");
     }else{
@@ -394,7 +396,7 @@ echo " Nome em falta";?>
 
 
         <button type="submit" class="btn btn-primary btn-lg" form="registro" name="submit"
-            value="submit">Registar</button>
+            value="submit">Alterar</button>
 
 
     </div>
