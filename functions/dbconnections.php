@@ -73,13 +73,16 @@ function getConnection(){
   {
     $conn = getConnection();
 
-    if (mysqli_query($conn, $query)) {
+    msqli_query($conn,$query);
+
+    $rows= msqli_affected_rows($conn);
+
+    if($rows > 0) {
      $result = true;
     } else {
       echo "Error updating record: " . mysqli_error($conn);
       $result = false;
     }
-
     mysqli_close($conn);
     return $result;
   }
