@@ -211,7 +211,6 @@ function updateValuesUtilizador($values, $id){
     
     }
 
-
 function updateValuesInstituto($values, $id){
   $conn = getConnection();
   $query = "UPDATE Instituicao SET " ;

@@ -41,20 +41,18 @@ return $data;
 function getFreguesiaById($idConc,$idFreg){   // VERIFICAR se esta correto
 
   $conn = getConnection();
-  $query = "SELECT nome FROM Freguesia WHERE cod_conselho ={$idConc} AND cod_freguesia = {$idFreg} ";
+  $query = "SELECT nome FROM Freguesia WHERE cod_conselho = {$idConc} AND cod_freguesia = {$idFreg}";
   $result = mysqli_query($conn,$query);
   
     $data = null;
     
     if (mysqli_num_rows($result) > 0) {
     $data=mysqli_fetch_field($result);
-  
-  
+
     }
   
   mysqli_close($conn);
   return $data;
-
 }
 
 function getAllUsers()
@@ -65,18 +63,12 @@ function getAllUsers()
     $data = array();
     if (mysqli_num_rows($result) > 0) {
     
-        $data = array();
+       $data = array();
         
        while($data = mysql_fetch_array($result)){
         echo $data['nome'];
 
        } 
-    
-       
-      
-
-
-
       } else {
       echo "0 results";
     }
@@ -220,19 +212,17 @@ function getInstitution($id){
   $query = "SELECT * FROM Concelho";;
   $result = mysqli_query($conn,$query);
   
-  
   if (mysqli_num_rows($result) > 0) {
     $column = array();
     foreach($result as $key => $value){
       $column[$key] = $value;
     }
 
-
-  } else {
-    echo "0 results";
-  }
-mysqli_close($conn);
-return $column;
+    } else {
+      echo "0 results";
+    }
+  mysqli_close($conn);
+  return $column;
   }
 
   
@@ -247,13 +237,11 @@ function getDonationByInstitute($id){
     foreach($result as $key => $value){
       $column[$key] = $value;
     }
-
-
-  } else {
-    echo "Não existe Instituição com id". $id;
-  }
-mysqli_close($conn);
-return $column;
+      } else {
+        echo "Não existe Instituição com id". $id;
+      }
+    mysqli_close($conn);
+    return $column;
   }
 
       function userExistsByEmail($email){
@@ -267,8 +255,8 @@ return $column;
           }else{
            return 1;
           }
-
       }
+
       function userExistsByCondC($conducao){
         $conn = getConnection();
         $query = "SELECT * FROM Voluntario WHERE Voluntario.conducao = ".$conducao ;  // verificar query
@@ -280,8 +268,5 @@ return $column;
           }else{
            return 1;
           }
-
-
-      }
-      
+      }    
 ?>

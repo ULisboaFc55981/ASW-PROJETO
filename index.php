@@ -14,11 +14,12 @@ include_once  './config/settings.php';
 include  './functions/auth.php';
 include './functions/dbconnections.php';
 include './functions/crud.php';
-
+$pageTittle = "Refood Fcul - ";
 
 if(isset($_GET['page'])){
     
 $content = changePage($_GET['page']);
+$pageTittle .= $_GET['page'];
 }else{
 $content = 'content';
 }

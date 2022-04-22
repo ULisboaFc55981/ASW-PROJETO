@@ -101,10 +101,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $data['cod_concelho'] = strip_tags($data['cod_concelho']);
         $data['cod_freguesia'] = strip_tags($data['cod_freguesia']);
     //para cada valor do pos tratar e adicionar a uma array associativa
-   $result = RegisterVoluntario($data);
+        $result = RegisterVoluntario($data);   ## OBTER ID ## mudar a função de registro
+         
         if($result){
             //caso o resultado seja positivo ir para o index
             session_start();
+            $_SESSION["tipo"]="Voluntario";
+            $_SESSION["id"]=1;    #### POR ID"#####
+            $_SESSION["logged"]=true;
+
         
              header('Location: index.php');
                  die();
@@ -117,15 +122,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     }
     // fazer chamada a função para registar
     
-    
-
-    }
-    
-
-
-
-
-    
+    }   
 }
 
 
@@ -157,30 +154,39 @@ if(isset($erros['email'])) echo "<p class=\"alerta\">". $erros['email'] ."</p>";
     <div class=" row">
         <div class="col">
             <label for="nome">Nome:
-            <?php if (in_array('nome', $missing) ) 
+            <?php 
+            // Caso o campo nome esteja na lista de missing , da erro de aviso
+            if (in_array('nome', $missing) ) 
                     echo "<span class=\"alerta\" > Introduza Nome*</span>";?>
             </label>
             <input type="text" class="form-control <?php if (in_array('nome', $missing)) 
-                        echo " is-invalid";?> " name="nome" id="nome" value="" >
+                        echo " is-invalid";?> " name="nome" id="nome" value="<?php if(isset($_POST['nome'])) echo $_POST['nome'] ?>" >
 
         </div>
         <div class="col">
             <label for="email">Email:
-                <?php if (in_array('email', $missing) ) 
+                <?php // Caso o campo email esteja na lista de missing 
+                if (in_array('email', $missing) ) 
                     echo "<span class=\"alerta\" > Introduza Email*</span>";?>
 
             </label>
-            <input type="text"  class="form-control" id="email" name="email" value="">
-            <span class="help-block"> <?php  // texto de ajuda ou aviso)?> </span>
+            <input type="text"  class="form-control" id="email" name="email" value="<?php if(isset($_POST['email'])) echo $_POST['email'] ?>">
+            <span class="help-block"> 
+                <?php  // Caso o campo email esteja na lista de erros , aviso de erro
+                 if(isset( $erros['email']))
+                 echo   "<span class=\"alerta\" >".$erros['email'] ."</span>" ?> </span>
 
         </div>
     </div>
+
     <div class="row">
 
         <div class="col"> 
 
             <label for="password">Password: 
-            <?php if (in_array('password', $missing) ) 
+            <?php 
+            // caso o campo email esteja na lista de missing criar aviso que esta em falta
+            if (in_array('password', $missing) ) 
                 echo "<span class=\"alerta\" > Password em falta*</span>";?>
             </label>    
             <input type="password"  class="form-control" name="password" id="password">
@@ -190,8 +196,10 @@ if(isset($erros['email'])) echo "<p class=\"alerta\">". $erros['email'] ."</p>";
         <div class="col">
 
             <label for="password2">Repita sua Password: 
-                <?php if (in_array('password2', $missing) ) 
-                    echo "<span class=\"alerta\" > Password em falta *</span>";?>
+                <?php       ## TO DO , apenas apresentar por favor repita a password em caso do password 1 campo preenchido
+                
+                if (in_array('password2', $missing) ) 
+                    echo "<span class=\"alerta\" > Repita a Password *</span>";?>
             </label>
             <input type="password"  class="form-control" name="password2" id="password2">
         </div>
@@ -200,7 +208,9 @@ if(isset($erros['email'])) echo "<p class=\"alerta\">". $erros['email'] ."</p>";
     <div class="row">
             <div class="col">         
                 <label for="tel">Telefone: 
-                    <?php if (in_array('tel', $missing)) 
+                    <?php
+                     ## TO DO , Caso ja exista um user com o mesmo telefone mostrar um erro a dizer que um user ja tem este contacto
+                     if (in_array('tel', $missing)) 
                         echo " Telefone em falta";?>
                 </label>
                 <input  type="text" pattern="\d*" maxlength="9"  class="form-control  <?php if (in_array('tel', $missing)) 
@@ -211,13 +221,13 @@ if(isset($erros['email'])) echo "<p class=\"alerta\">". $erros['email'] ."</p>";
     
       
                 <label for="cc">Cartão de Cidadão
-                    <?php if (in_array('cc', $missing) ) 
-                    echo "<span class=\"alerta\" > Em Falta *</span>";?>
+                    <?php  ## TO DO ,Caso exista um utilizador com o mesmo numero de cartão de cidadão dar erro e mostra lo
+                    if (in_array('cc', $missing) ) 
+                    echo "<span class=\"alerta\" > Em Falta Cartão de Cidadão*</span>";?>
 
                 </label>
-                <input type="number" type="text" pattern="\d*" maxlength="8"  class="form-control" name="cc" id="cc">  
-
-        </div>
+                <input type="number" type="text" pattern="\d*" maxlength="8"  class="form-control" name="cc" id="cc" value="<?php 
+                       if(isset($_POST['cc']) && !in_array("cc",$erros)) echo $_POST['cc'] ?>">
 
         <div class="col">
 
@@ -226,7 +236,8 @@ if(isset($erros['email'])) echo "<p class=\"alerta\">". $erros['email'] ."</p>";
                     echo "<span class=\"alerta\" > Em Falta *</span>";?>
             </label>
 
-            <input type="number"  type="text" pattern="\d*" maxlength="8"  class="form-control" name="Cconducao" id="Cconducao">
+            <input type="number"  type="text" pattern="\d*" maxlength="8"  class="form-control" name="Cconducao" id="Cconducao" value="<?php 
+                       if(isset($_POST['Cconducao']) && !in_array("Cconducao",$erros)) echo $_POST['Cconducao'] ?>">
 
         </div>
         <div class="col">
@@ -254,7 +265,7 @@ if(isset($erros['email'])) echo "<p class=\"alerta\">". $erros['email'] ."</p>";
                     $distritos = getDistritos();
                     if($distritos > 0 ){
                         foreach($distritos as $key => $valor ){
-                            echo "<option value=" . $valor['cod_distrito'] . ">". $valor['nome']   . "</option>" ; 
+                            echo "<option value=" . $valor['cod_distrito'] . "  onclick='getConcelho(". $valor['cod_distrito']  ." )'>". $valor['nome']   . "</option>" ; 
                         }
                     
                     
@@ -271,12 +282,15 @@ if(isset($erros['email'])) echo "<p class=\"alerta\">". $erros['email'] ."</p>";
             Concelho
             </label>
             <select name="cod_concelho" class="form-control"  id="conc">
+                <script>
+                
+                </script>
                 <?php
-                    
+                    // if(distrito.isSet()) getConcelhos(distrito_id)
                     $concelho = getConcelhos();
                     if($concelho > 0 ){
                         foreach($concelho as $valor ){
-                            echo "<option value=" . $valor['cod_concelho'] . ">". $valor['nome'] . "</option>" ; 
+                            echo "<option value=" . $valor['cod_concelho'] . ">". $valor['nome'] . " onclick='getFreguesia(" . $valor['cod_concelho'] . ")' </option>" ; 
                         }
                     
                     
@@ -294,7 +308,7 @@ if(isset($erros['email'])) echo "<p class=\"alerta\">". $erros['email'] ."</p>";
             </label>
             <select name="cod_freguesia" class="form-control"  id="freg">
                 <?php
-                    
+                       // if(distrito.isSet()) getConcelhos(distrito_id)
                     $freguesias = getFreguesias();
                     if($freguesias > 0 ){
                         foreach($freguesias as $freg ){
