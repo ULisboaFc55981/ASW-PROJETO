@@ -7,8 +7,6 @@ if(!isLoggedIn() || !isLoggedInVoluntario()){
     exit();
     }
 
-
-
 $erros = array();
 $missing = array();
 $data = array();
@@ -18,12 +16,7 @@ $utilizador = array();
 
         $data = getVoluntario($_SESSION['id']);
         print_r($data);
-    
-
-
     }
-
-
 
 //Caso tenha sido feito um pedido Post
 if($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -44,7 +37,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $utilizador['telefone'] = htmlspecialchars($_POST['telefone']);
         $utilizador['telefone'] = stripcslashes($utilizador['telefone']);  
     }
-  
     
      // e caso a variavel Cconducao não esteja assignada
       if(empty($_POST['dob'])){
@@ -60,7 +52,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $voluntario['genero'] = htmlspecialchars($_POST['genero']);
         $voluntario['genero']  = stripcslashes(  $voluntario['genero'] );
     }
-    
     }
 
     // se não houve[r erros ou valores vazios
@@ -88,41 +79,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         }
     }
     // fazer chamada a função para registar
-    
-    
-
     }
-    
-
-
-
-
-    
-
-
-
 ?>
 
 <article class="form-group container">
     <br>
 
-
 <!--  verificar se existem erros ou dados em falta -->
 <?php if (count($erros) >0  || count($missing) >0){ echo "
 <p class=\"alerta\">Registro Invalido, por favor corrija os dados</p>";}
 if(isset($erros['pass'])) echo "<p class=\"alerta\">". $erros['pass'] ."</p>";  // secalhar no futuro metemos um foreach dos erros
-
-
  ?>
 
-
 <div class=" justify-content-center">
-
-
     <form action="" method="POST" id="registro" >
-
-
-
 
     <!--  verificar se esta em falta o nome -->
     <div class=" row">
@@ -135,7 +105,6 @@ if(isset($erros['pass'])) echo "<p class=\"alerta\">". $erros['pass'] ."</p>";  
                         echo " is-invalid";?> " name="nome" id="nome" value="<?php echo $data[0]['nome'] ?> "  >
 
         </div>
-        <div class="col">
         <div class="col">         
                 <label for="tel">Telefone: 
                     <?php if (in_array('tel', $missing)) 
@@ -146,13 +115,9 @@ if(isset($erros['pass'])) echo "<p class=\"alerta\">". $erros['pass'] ."</p>";  
                 </div>
     </div>
     </div>
-
-
     <div class="row">
          
         <div class="col">
-    
-
 
             <label for="dob">Data de Nascimento
             <?php if (in_array('dob', $missing) ) 
