@@ -9,7 +9,6 @@
   }
   
   
-
   //Obter todos os distritos
   
   function getFreguesias()
@@ -230,6 +229,24 @@ function updateValuesInstituto($values, $id){
   return $result;
 
 }
+
+
+function insertDisponibilidade($dados, $id) {
+  $conn = getConnection();
+  $query = "INSERT INTO Disponibilidade(id_U, hora_inicio, hora_fim, dia) VALUES ( \"{$id}\", \"{$dados['hora_inicial']}\" , \"{$dados['hora_final']}\" , \"{$dados['dias']}\")";
+   $result = setQuery($query);
+   return $result;
+}
+
+function updateAreaGeografica($dados, $id){
+  $conn = getConnection();
+  $query = "UPDATE Utilizador SET codigo_distrito = \"{$dados['codigo_distrito']}\" , codigo_concelho = \"{$dados['codigo_concelho']}\", codigo_freguesia = \"{$dados['codigo_freguesia']}\" WHERE Utilizador.id = {$id}; " ;
+  $result =setQuery($query);
+  return $result;
+}
+
+
+
 
     ?>
       

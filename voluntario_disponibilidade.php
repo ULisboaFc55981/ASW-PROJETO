@@ -12,12 +12,6 @@ $missing = array();
 $data = array();
 $utilizador = array();
 
-    if(isset($_SESSION['id'])){
-
-        $data = getVoluntario($_SESSION['id']);
-        print_r($data);
-    }
-
 //Caso tenha sido feito um pedido Post
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     // e caso a variavel submit esteja assignada
@@ -42,8 +36,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
       if(empty($_POST['hora_final'])){
         array_push($missing ,"hora_final");
     }else{
-        $voluntario['hora_final'] = htmlspecialchars($_POST['hora_final']);
-        $voluntario['hora_final']  = stripcslashes(  $voluntario['hora_final'] );
+        $utilizador['hora_final'] = htmlspecialchars($_POST['hora_final']);
+        $utilizador['hora_final']  = stripcslashes(  $utilizador['hora_final'] );
        
     }
     }
@@ -57,31 +51,25 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $utilizador['codigo_concelho'] = strip_tags($utilizador['codigo_concelho']);
         $utilizador['codigo_freguesia'] = strip_tags($utilizador['codigo_freguesia']);
     //para cada valor do pos tratar e adicionar a uma array associativa
-    $result = updateValuesUtilizador($utilizador,$_SESSION['id']);
-    $result2 = updateValuesVoluntario($voluntario,$_SESSION['id']);
+    $result = insertDisponibilidade($utilizador,$_SESSION['id']);
+    $result2 = updateAreaGeografica($utilizador,$_SESSION['id']);
+   
         if($result && $result2){
-            //caso o resultado seja positivo ir para o index
-            session_start();
-        
-             header('Location: index.php');
-                 die();
-
+            echo "REGISTO completo com sucesso";
           }else{
-              //caso contrario adicionar a array erros
           $erros['submit'] = TRUE;
-
+          print_r($erros);
         }
     }
-    // fazer chamada a função para registar
     }
 ?>
-
 <article class="form-group container">
     <br>
 
     <!--  verificar se existem erros ou dados em falta -->
-    <?php if (count($erros) >0  || count($missing) >0){ echo "
+    <?php if (count($erros) >0  || count($missing) >0){ echo  "
 <p class=\"alerta\">Registro Invalido, por favor corrija os dados</p>";}
+
 if(isset($erros['pass'])) echo "<p class=\"alerta\">". $erros['pass'] ."</p>";  // secalhar no futuro metemos um foreach dos erros
  ?>
 
@@ -95,14 +83,15 @@ if(isset($erros['pass'])) echo "<p class=\"alerta\">". $erros['pass'] ."</p>";  
                     <div>
                         <label for="dias">Dia</label>
                     </div>
-                    <select width=300 style="width: 450px" size="7" multiple>
-                        <option value="1">Segunda-feira</option>
-                        <option value="2">Terça-feira</option>
-                        <option value="3">Quarta-feira</option>
-                        <option value="4">Quinta-feira</option>
-                        <option value="5">Sexta-feira</option>
-                        <option value="6">Sábado</option>
-                        <option value="7">Domingo</option>
+                    <select name="dias" class="form-control">
+                        <option value="1">Domingo</option>
+                        <option value="2">Segunda-feira</option>
+                        <option value="3">Terça-feira</option>
+                        <option value="4">Quarta-feira</option>
+                        <option value="5">Quinta-feira</option>
+                        <option value="6">Sexta-feira</option>
+                        <option value="7">Sábado</option>
+                        
                     </select>
                 </div>
                 <div class="col">
@@ -110,15 +99,17 @@ if(isset($erros['pass'])) echo "<p class=\"alerta\">". $erros['pass'] ."</p>";  
                         <?php if (in_array('hora_inicial', $missing)) 
                         echo " hora_inicial em falta";?>
                     </label>
-                    <input type="time" class="form-control  <?php if (in_array('hora_inicial', $missing)) 
+                    <input type="time" class="form-control" name = "hora_inicial" <?php if (in_array('hora_inicial', $missing)) 
                         echo " isIis-invalid";?>" id="hora_inicial" name="hora_inicial"
                         value="<?php echo $data[0]['hora_inicial'] ?>">
+                </div>
 
+                <div class="col">       
                     <label for="hora_final">Hora final:
                         <?php if (in_array('hora_final', $missing)) 
                         echo " hora_final em falta";?>
                     </label>
-                    <input type="time" class="form-control  <?php if (in_array('hora_final', $missing)) 
+                    <input type="time" class="form-control" name = "hora_final" <?php if (in_array('hora_final', $missing)) 
                         echo " isIis-invalid";?>" id="hora_final" name="hora_final"
                         value="<?php echo $data[0]['hora_final'] ?>">
                 </div>
@@ -163,11 +154,8 @@ if(isset($erros['pass'])) echo "<p class=\"alerta\">". $erros['pass'] ."</p>";  
                             $option .= " selected='selected' ";
                         }
                     echo  $option ." value=" . $valor['codigo_concelho'] . ">". $valor['nome']   . "</option>" ; 
-                    
-
                     }
                 }
-
                 ?>
                     </select>
                 </div>
@@ -189,34 +177,18 @@ if(isset($erros['pass'])) echo "<p class=\"alerta\">". $erros['pass'] ."</p>";  
                                 }
                             echo  $option ." value=" . $freg['cod_freguesia'] . ">". $freg['nome']   . "</option>" ; 
                             }
-        
-
-
                         }
-
-
                         ?>
                     </select>
 
 
                 </div>
             </div>
-
-
             <div style="margin-top: 20px" class="row justify-content-center">
-
                 <button type="submit" class="btn btn-primary btn-lg" form="registro" name="submit"
                     value="submit">Registar</button>
-
-
             </div>
     </div>
     </form>
-
-
-
     </div>
-
-
-
 </article>
