@@ -51,7 +51,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $utilizador['codigo_concelho'] = strip_tags($utilizador['codigo_concelho']);
         $utilizador['codigo_freguesia'] = strip_tags($utilizador['codigo_freguesia']);
     //para cada valor do pos tratar e adicionar a uma array associativa
-    $result = insertDisponibilidade($utilizador,$_SESSION['id']);
+    $result = insertVoluntarioDisponibilidade($utilizador,$_SESSION['id']);
     $result2 = updateAreaGeografica($utilizador,$_SESSION['id']);
    
         if($result && $result2){

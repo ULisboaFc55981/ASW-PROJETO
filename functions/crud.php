@@ -231,9 +231,9 @@ function updateValuesInstituto($values, $id){
 }
 
 
-function insertDisponibilidade($dados, $id) {
+function insertVoluntarioDisponibilidade($dados, $id) {
   $conn = getConnection();
-  $query = "INSERT INTO Disponibilidade(id_U, hora_inicio, hora_fim, dia) VALUES ( \"{$id}\", \"{$dados['hora_inicial']}\" , \"{$dados['hora_final']}\" , \"{$dados['dias']}\")";
+  $query = "INSERT INTO Disponibilidade(id_U, tipo,  hora_inicio, hora_fim, dia) VALUES ( \"{$id}\", 'Voluntario' , \"{$dados['hora_inicial']}\", \"{$dados['hora_final']}\" , \"{$dados['dias']}\")";
    $result = setQuery($query);
    return $result;
 }
@@ -245,8 +245,5 @@ function updateAreaGeografica($dados, $id){
   return $result;
 }
 
-
-
-
-    ?>
+?>
       

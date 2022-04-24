@@ -250,6 +250,7 @@ function updateVoluntarioGen($id, $gen) {
     // SE OCORREU COM SUCESSO VAMOS TER QUE DEVOLVER UM TRUE OU FALSE
 }
 
+//esta funcao nao esta certa nem esta a ser usada
 function updateDisponibilidade($id_U, $hora_inicio, $hora_fim, $dia) {
   $conn = getConnection();
   $queryUser = "UPDATE Disponibilidade SET hora_inicio = '{$hora_inicio}', hora_fim = '{$hora_fim}', dia = {$dia}  WHERE id_U = {$id_U};";
