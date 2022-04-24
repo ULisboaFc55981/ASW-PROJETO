@@ -1,17 +1,17 @@
 <?php
 
-if(!isLoggedIn() || !isLoggedInInstitute()){
+if(!isLoggedIn() || !isLoggedInVoluntario()){
     header('Location: index.php');
     exit();
 }
-  $data = array();
+$data = array();
 
 
-    if(isset($_SESSION['id'])){
-        $id = $_SESSION['id'];
-        $data = getInstitution( $id );
+if(isset($_SESSION['id'])){
+    $id = $_SESSION['id'];
+    $data = getVoluntario( $id );
 
-    }
+}
 
 
 

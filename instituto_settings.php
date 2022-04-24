@@ -1,23 +1,19 @@
 <?php
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
+if(!isLoggedIn() || !isLoggedInInstitute()){ 
+    header('Location: index.php');
+    exit();
+    }
 
 $erros = array();
 $missing = array();
 $utilizador = array();
-$utilizador = array();
   $data = array();
 
-if($_SERVER["REQUEST_METHOD"] == "GET"){
 
-    if(isset($_GET['id'])){
-        $id = $_GET['id'];
-        $data = getInstitution($_GET['id']);
+    if(isset($_SESSION['id'])){
 
-    }
+        $data =  getInstitution($_SESSION['id']);
 
 
 
@@ -97,8 +93,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $utilizador['codigo_concelho'] = strip_tags($utilizador['codigo_concelho']);
         $utilizador['codigo_freguesia'] = strip_tags($utilizador['codigo_freguesia']);
     //para cada valor do pos tratar e adicionar a uma array associativa
-   $result = updateValuesUtilizador($utilizador,$_GET['id']);
-   $result2 = updateValuesInstituto($instituto,$_GET['id']);
+   $result = updateValuesUtilizador($utilizador,$_SESSION['id']);
+   $result2 = updateValuesInstituto($instituto,$_SESSION['id']);
         if($result && $result2){
             //caso o resultado seja positivo ir para o index
             session_start();
@@ -124,6 +120,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     
 }
+
 
 
 
@@ -246,17 +243,16 @@ echo " Nome em falta";?>
                         if($freguesias > 0 ){
                             foreach($freguesias as $freg ){
                                 $option =  "<option ";
-                                if($valor == $data[0]['codigo_freguesia']){
+                                if($freg == $data[0]['codigo_freguesia']){
                                     $option .= " selected='selected' ";
                                 }
-                            echo  $option ." value=" . $valor['codigo_freguesia'] . ">". $valor['nome']   . "</option>" ; 
+                            echo  $option ." value=" . $freg['cod_freguesia'] . ">".$freg['nome']   . "</option>" ; 
                             }
         
 
 
                         }
-
-
+                
                         ?>
                     </select>
 

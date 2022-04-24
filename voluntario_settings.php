@@ -1,31 +1,22 @@
 <?php
 
+use phpDocumentor\Reflection\PseudoTypes\False_;
+
+if(!isLoggedIn() || !isLoggedInVoluntario()){ 
+    header('Location: index.php');
+    exit();
+    }
 
 
-
-
-
-
-$dataVol = array();
-$dataUser = array();
-$dataNova = array();
-$erros = array();
-$missing = array();
-$data = array();
-
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 
 $erros = array();
 $missing = array();
 $data = array();
-$id;
-if($_SERVER["REQUEST_METHOD"] == "GET"){
+$utilizador = array();
 
-    if(isset($_GET['id'])){
-        $id = $_GET['id'];
-        $data = getVoluntario($_GET['id']);
+    if(isset($_SESSION['id'])){
+
+        $data = getVoluntario($_SESSION['id']);
         print_r($data);
     
 
@@ -34,60 +25,56 @@ if($_SERVER["REQUEST_METHOD"] == "GET"){
 
 
 
-}
-
 //Caso tenha sido feito um pedido Post
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     // e caso a variavel submit esteja assignada
     if(array_key_exists('submit',$_POST)){
 
-   // e caso a variavel name não esteja assignada
     if(empty($_POST['nome'])){
     array_push($missing, 'nome');    
     
     }else{
-        $data['nome'] = htmlspecialchars($_POST['nome']);
-    
-     if(empty($_POST['tel'])){
-        array_push($missing ,"tel");
+        $utilizador['nome'] = htmlspecialchars($_POST['nome']);
+        $utilizador['nome'] = stripcslashes($utilizador['nome']);
+    }   
+   
+    if(empty($_POST['telefone'])){
+        array_push($missing ,"telefone");
     } else{
-        $data['tel'] = htmlspecialchars($_POST['tel']);
-        $data['tel'] = stripcslashes($data['tel']);  
+        $utilizador['telefone'] = htmlspecialchars($_POST['telefone']);
+        $utilizador['telefone'] = stripcslashes($utilizador['telefone']);  
     }
-    if(empty($_POST['cc'])){
-       array_push($missing ,"cc");
-    }else{
-        $data['cc'] = htmlspecialchars($_POST['cc']);
-        $data['cc'] = stripcslashes($data['cc']);
-    }
+  
+    
      // e caso a variavel Cconducao não esteja assignada
-      }if(empty($_POST['dob'])){
+      if(empty($_POST['dob'])){
         array_push($missing ,"dob");
     }else{
-        $data['dob'] = htmlspecialchars($_POST['dob']);
-        $data['dob']  = stripcslashes(  $data['dob'] );
+        $voluntario['dob'] = htmlspecialchars($_POST['dob']);
+        $voluntario['dob']  = stripcslashes(  $voluntario['dob'] );
        
     }if(empty($_POST['genero'])){
         array_push($missing ,"genero");
 
     }else{
-        $data['genero'] = htmlspecialchars($_POST['genero']);
-        $data['genero']  = stripcslashes(  $data['genero'] );
+        $voluntario['genero'] = htmlspecialchars($_POST['genero']);
+        $voluntario['genero']  = stripcslashes(  $voluntario['genero'] );
     }
     
     }
 
     // se não houve[r erros ou valores vazios
     if(empty($missing) && empty($erros)){
-        $data['cod_distrito'] = htmlspecialchars($_POST['cod_distrito']);
-        $data['cod_concelho'] = htmlspecialchars($_POST['cod_concelho']);
-        $data['cod_freguesia'] = htmlspecialchars($_POST['cod_freguesia']);
-        $data['cod_distrito'] = strip_tags($data['cod_distrito']);
-        $data['cod_concelho'] = strip_tags($data['cod_concelho']);
-        $data['cod_freguesia'] = strip_tags($data['cod_freguesia']);
+        $utilizador['codigo_distrito'] = htmlspecialchars($_POST['codigo_distrito']);
+        $utilizador['codigo_concelho'] = htmlspecialchars($_POST['codigo_distrito']);
+        $utilizador['codigo_freguesia'] = htmlspecialchars($_POST['codigo_freguesia']);
+        $utilizador['codigo_distrito'] = strip_tags($utilizador['codigo_distrito']);
+        $utilizador['codigo_concelho'] = strip_tags($utilizador['codigo_concelho']);
+        $utilizador['codigo_freguesia'] = strip_tags($utilizador['codigo_freguesia']);
     //para cada valor do pos tratar e adicionar a uma array associativa
-   $result = RegisterVoluntario($data,$id);
-        if($result){
+    $result = updateValuesUtilizador($utilizador,$_SESSION['id']);
+    $result2 = updateValuesVoluntario($voluntario,$_SESSION['id']);
+        if($result && $result2){
             //caso o resultado seja positivo ir para o index
             session_start();
         
@@ -111,7 +98,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
 
     
-}
 
 
 
@@ -146,175 +132,150 @@ if(isset($erros['pass'])) echo "<p class=\"alerta\">". $erros['pass'] ."</p>";  
                     echo "<span class=\"alerta\" > Introduza Nome*</span>";?>
             </label>
             <input type="text" class="form-control <?php if (in_array('nome', $missing)) 
-                        echo " is-invalid";?> " name="nome" id="nome" value="" >
+                        echo " is-invalid";?> " name="nome" id="nome" value="<?php echo $data[0]['nome'] ?> "  >
 
         </div>
         <div class="col">
-            <label for="email">Email:
-                <?php if (in_array('email', $missing) ) 
-                    echo "<span class=\"alerta\" > Introduza Email*</span>";?>
-
-            </label>
-            <input type="text"  class="form-control" id="email" name="email" value="">
-            <span class="help-block"> <?php  // texto de ajuda ou aviso)?> </span>
-
-        </div>
-    </div>
-    <div class="row">
-
-        <div class="col"> 
-
-            <label for="password">Password: 
-            <?php if (in_array('password', $missing) ) 
-                echo "<span class=\"alerta\" > Password em falta*</span>";?>
-            </label>    
-            <input type="password"  class="form-control" name="password" id="password">
-        
-        </div>
-        
-        <div class="col">
-
-            <label for="password2">Repita sua Password: 
-                <?php if (in_array('password2', $missing) ) 
-                    echo "<span class=\"alerta\" > Password em falta *</span>";?>
-            </label>
-            <input type="password"  class="form-control" name="password2" id="password2">
-        </div>
-    </div>
-
-    <div class="row">
-            <div class="col">         
+        <div class="col">         
                 <label for="tel">Telefone: 
                     <?php if (in_array('tel', $missing)) 
                         echo " Telefone em falta";?>
                 </label>
-                <input type="number"  class="form-control  <?php if (in_array('tel', $missing)) 
-                        echo " isIis-invalid";?>" id="tel" name="tel" value="<?php 
-                       if(isset($_POST['tel'])) echo $_POST['tel'] ?>">
+                <input type="number"  class="form-control  <?php if (in_array('telefone', $missing)) 
+                        echo " isIis-invalid";?>" id="telefone" name="telefone" value="<?php echo $data[0]['telefone'] ?>">
                 </div>
+    </div>
+    </div>
+
+
+    <div class="row">
+         
         <div class="col">
     
-      
-                <label for="cc">Cartão de Cidadão
-                    <?php if (in_array('cc', $missing) ) 
-                    echo "<span class=\"alerta\" > Em Falta *</span>";?>
 
-                </label>
-                <input type="number"  class="form-control" name="cc" id="cc">  
-
-        </div>
-
-        <div class="col">
-
-            <label for="Cconducao">Carta de Condução
-            <?php if (in_array('Cconducao', $missing) ) 
-                    echo "<span class=\"alerta\" > Em Falta *</span>";?>
-            </label>
-
-            <input type="number"  class="form-control" name="Cconducao" id="Cconducao">
-
-        </div>
-        <div class="col">
 
             <label for="dob">Data de Nascimento
             <?php if (in_array('dob', $missing) ) 
                     echo "<span class=\"alerta\" > Em Falta *</span>";?>
 
             </label>
-            <input type="date" class="form-control" name="dob" id="dob">
+            <input type="date" class="form-control" name="dob" id="dob"  value="<?php echo $data[0]['dob'] ?>">
        
         </div>
+        <div class="col">
+                    <label for="dist" class="">
+                        Distrito
+                    </label>
+                    <select name="codigo_distrito" class="form-control" id="dist">
+                    <?php
+
+                    $distritos = getDistritos();
+                    if($distritos > 0 ){
+                    foreach($distritos as $key => $valor ){
+                       $option =  "<option ";
+                        if($valor == $data[0]['codig_distrito']){
+                            $option .= " selected='selected' ";
+                        }
+                    echo  $option ." value=" . $valor['cod_distrito'] . ">". $valor['nome']   . "</option>" ; 
+                    }
+
+                    }
+                    ?>
+
+                </select>
+
+                </div>
     </div>
 
     
 
     <div class="row">
+   
     <div class="col">
-            <label for="dist" class="" >
-            Distrito
-            </label>
-            <select name="cod_distrito" class="form-control"  id="dist">
-                <?php
-                    
-                    $distritos = getDistritos();
-                    if($distritos > 0 ){
-                        foreach($distritos as $key => $valor ){
-                            echo "<option value=" . $valor['cod_distrito'] . ">". $valor['nome']   . "</option>" ; 
-                        }
-                    
-                    
-                
-                    }
-                
-            
-            ?> 
-           </select>
+                    <label for="conc" class="">
+                        Concelho
+                    </label>
+                    <select name="codigo_concelho" class="form-control" id="conc">
+                        <?php
 
-        </div>
-        <div class="col">
-         <label for="conc" class="" >
-            Concelho
-            </label>
-            <select name="cod_concelho" class="form-control"  id="conc">
-                <?php
-                    
                     $concelho = getConcelhos();
                     if($concelho > 0 ){
-                        foreach($concelho as $valor ){
-                            echo "<option value=" . $valor['cod_concelho'] . ">". $valor['nome'] . "</option>" ; 
+                    foreach($concelho as $valor ){
+                        $option =  "<option ";
+                        if($valor == $data[0]['codigo_concelho']){
+                            $option .= " selected='selected' ";
                         }
+                    echo  $option ." value=" . $valor['codigo_concelho'] . ">". $valor['nome']   . "</option>" ; 
                     
-                    
-                
-                    }
-                
-            
-            ?> 
-           </select>
 
-        </div>
-        <div class="col">
-         <label for="freg" class="" >
-            Freguesia
-            </label>
-            <select name="cod_freguesia" class="form-control"  id="freg">
-                <?php
-                    
-                    $freguesias = getFreguesias();
-                    if($freguesias > 0 ){
-                        foreach($freguesias as $freg ){
-                            echo "<option value=" . $freg['cod_freguesia'] . ">". $freg['nome'] . "</option>" ; 
-                        }
-                    
-                    
-                
                     }
-                
-            
-            ?> 
-           </select>
+                }
 
-        </div>
+                ?>
+                    </select>
+
+                </div>
+                <div class="col">
+                <label for="freg" class="">
+                        Freguesia
+                    </label>
+                   <select name="codigo_freguesia" class="form-control" id="freg">
+                    <?php
+
+                        $freguesias = getFreguesias();
+                        if($freguesias > 0 ){
+                            foreach($freguesias as $freg ){
+                                $option =  "<option ";
+                                if($freg == $data[0]['codigo_freguesia']){
+                                    $option .= " selected='selected' ";
+                                }
+                            echo  $option ." value=" . $freg['cod_freguesia'] . ">". $freg['nome']   . "</option>" ; 
+                            }
         
+
+
+                        }
+
+
+                        ?>
+                    </select>
+
+                </div>
+
     </div>
     <div class="row">
         
         <div class="col"><br>
+    
                  <div class="form-check-inline">
-                <input class="form-check-input" type="radio" name="genero" id="masculino">
+
+                 <?php 
+                 $isMale=False;
+                 $isFem=False;
+                 $isOther =False;
+                 $choosen = $data[0]['genero'];
+                 if($choosen === "masculino"){
+                    $isMale=true;
+                 }elseif ($choosen === "feminino"){
+                    $isFem=true;
+                 }else{
+                    $isOther =true;
+                 }
+                    ?>
+                <input class="form-check-input" type="radio" name="genero" id="masculino" <?php if($isMale) echo "checked" ?>>
                 <label class="form-check-label" for="masculino">
                     Masculino  <?php if (in_array('genero', $missing) ) 
                         echo "<span class=\"alerta\" > Em Falta *</span>";?>
                 </label>
                 </div>
                 <div class="form-check-inline">
-                <input class="form-check-input" type="radio" name="genero" id="feminino" >
+                <input class="form-check-input" type="radio" name="genero" id="feminino"  <?php if($isFem) echo "checked" ?>>
                 <label class="form-check-label" for="flexRadioDefault2">
                 Feminino
                 </label>
                 </div>
                 <div class="form-check-inline">
-                <input class="form-check-input" type="radio" name="genero" id="outro" >
+                <input class="form-check-input" type="radio" name="genero" id="outro" <?php if($isOther) echo "checked" ?>>
                 <label class="form-check-label" for="outro">
                 Outro
                 </label>

@@ -1,10 +1,6 @@
 <?php
 
-define('DB_SERVIDOR','localhost');
-define('DB_NOME', 'asw09');
-define('DB_USUARIO', 'asw09');
-define('DB_PASSWORD','aswgrupo09');
-
+include SITE_ROOT . '/config/db_settings.php';
 //funções relacionadas com 
 
 function getConnection(){

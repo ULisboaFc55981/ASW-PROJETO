@@ -4,11 +4,11 @@
 
 
 ?>
-<body>
+
     <div class="container-fluid ">
     <header class="row ">
         
-    <div class="col "><h1><a href="index.php"><img src="img/header.png" height="80" width="150"> </a></h1></div>
+    <div class="col ">
      <?php if(isLoggedInInstitute()) : ?>
 
       <?php endif;?>
@@ -32,7 +32,7 @@
   <!-- Links -->
   <ul class="navbar-nav">
     <li class="nav-item">
-      <a class="nav-link" href="<?php echo 'logout.php' . '?id=' . $_SESSION['id']  ?>">Logout</a>
+        <a class="nav-link" href="<?php echo 'logout.php' . '?id=' . $_SESSION['id']  ?>"><span class="navbar-text" Logout</span></a>
     </li>
     <!-- Dropdown -->
     <li class="nav-item dropdown">
@@ -54,9 +54,9 @@
       <a class="nav-link" href="<?php echo 'index.php' . '?page=' . "perfil_instituto" . "&id=". $_SESSION['id']  ?>">Meu Perfil</a>
     </li>
   </ul>
-  
 
-    
+
+          <h1><a href="index.php"><img src="img/header.png" height="80" width="150"> </a></h1></div>
 </nav>
 
 
@@ -68,6 +68,8 @@
   
 
   <!-- Links -->
+          <div class="row">
+          <div class="col">
   <ul class="navbar-nav">
     <li class="nav-item">
       <a class="nav-link" href="<?php echo 'logout.php' . '?id=' . $_SESSION['id']  ?>">Logout</a>
@@ -85,54 +87,60 @@
     <li class="nav-item">
       <a class="nav-link" href="#">Mensagens</a>
     </li>
+      <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+              Prefências
+          </a>
+          <div class="dropdown-menu">
+              <a class="dropdown-item" href="index.php?page=voluntario_settings">Dados Pessoais</a>
+              <a class="dropdown-item" href="#">Disponibilidade</a>
+
+          </div>
+      </li>
     <li class="nav-item">
-      <a class="nav-link" href="#">Preferências</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="#">Meu Perfil</a>
+      <a class="nav-link" href="<?php echo 'index.php' . '?page=' . "perfil_voluntario" . "&id=". $_SESSION['id']  ?>">Meu Perfil</a>
     </li>
   </ul>
-  
 
-    
+
+          <h1><a href="index.php"><img src="img/header.png" height="80" width="150"> </a></h1></div>
 </nav>
   
 
 
-    <?php else : ?>
+    <?php else : ########### CASO NÃO ESTEJA AUTENTICADO #################?>
 
-      <nav class=" navbar-expand-sm bg-primary navbar-dark">
+      <nav class=" navbar-expand-sm sticky-top bg-primary navbar-dark  ">
   <!-- Brand -->
-  
 
+          <div class="row container-fluid ">
+              <div class="col d-flex align-items-center">
   <!-- Links -->
-  <ul class="navbar-nav">
+  <ul class="nav navbar-nav ">
     <li class="nav-item">
-      <a class="nav-link" href="<?php echo 'index.php' . '?page=' . "login" ?>">Login</a>
+      <a class="nav-link" href="<?php echo 'index.php' . '?page=' . "login" ?>"><span class="navbar-text">Login</span></a>
     </li>
     <!-- Dropdown -->
-    <li class="nav-item dropdown">
+    <li class="nav-item">
       <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-        Registar
+          <span class="navbar-text">Registar</span>
       </a>
-      <div class="dropdown-menu">
-        <a class="dropdown-item" href="<?php echo 'index.php' . '?page=' . "registerInst" ?>">Instituto</a>
-        <a class="dropdown-item" href="<?php echo 'index.php' . '?page=' . "register" ?>">Voluntario</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="<?php echo 'index.php' . '?page=' . "registerInst" ?>">Instituto</a>
+          <a class="dropdown-item" href="<?php echo 'index.php' . '?page=' . "register" ?>">Voluntario</a>
+
+        </div>
+    </li>
+
       </div>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="<?php echo 'index.php' . '?page=' . "changeSettings" ?>">Alterar Dados</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="<?php echo 'index.php' . '?page=' . "open_profile" ?>">Ver Perfil</a>
-    </li>
 
-  </ul>
-  
 
-    
+
+
+     <div class="col d-flex justify-content-end"">
+              <div class="navbar-brand "><a href="index.php"><img src="img/header.png" height="80" width="150"> </a></div>
+</div>
+      </div>
 </nav>
     <?php endif?>
 
-   
-</nav>

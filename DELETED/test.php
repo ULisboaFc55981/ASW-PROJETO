@@ -7,6 +7,7 @@ include  './functions/dbconnections.php';
 
 $teste =getInstitution(52);
 
-print_r($teste);
-
+print_r($_SERVER['DOCUMENT_ROOT']);
+print_r(dirname(__DIR__));
+print_r((__FILE__) );
 ?>

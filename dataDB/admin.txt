@@ -1,6 +1,0 @@
-INSERT INTO Admin (admin_id,username, password)
-        VALUES (55981,'admin', '288d695c7fcff067dbb4b3bc2eba19711')
-        ;
-INSERT INTO Admin (admin_id,username, password)
-VALUES (55981,'administrador', '$2y$10$F8zq0Ro8glanLvMmDUio9uGvXJWfBQS1JbnD4ZyAhSIjI9Lg3/kqu');
-
